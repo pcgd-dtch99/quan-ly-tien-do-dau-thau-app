@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QL Tiến độ">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#161b27">
 
 <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
 <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
@@ -23,22 +23,30 @@
 <style>
   html, body{
     margin:0; padding:0; width:100%; height:100%;
-    background:#ffffff;
+    background:#161b27;
     -webkit-tap-highlight-color:transparent;
     overscroll-behavior:none; /* tránh hiệu ứng bounce/giật lố ở rìa trang, nhưng KHÔNG chặn cuộn bên trong iframe */
   }
-  /* QUAN TRỌNG: iframe để bình thường (không dùng position:fixed) và html/body KHÔNG dùng
-     overflow:hidden — đây chính là tổ hợp khiến Safari/iOS "nuốt" thao tác vuốt dọc, không
-     truyền được cử chỉ cuộn xuống vào bên trong iframe (trong khi vuốt ngang vẫn lọt qua được). */
+  /* QUAN TRỌNG: dùng layout flex-column bình thường (KHÔNG position:fixed cho phần nội dung
+     chính) — đây là cách tránh lỗi Safari/iOS "nuốt" thao tác vuốt dọc đã sửa trước đó. */
+  body{ display:flex; flex-direction:column; }
+
+  /* Dải màu lấp đúng vùng "status bar" (đồng hồ/pin) của iPad — tô cùng màu với header thật
+     của app (#161b27, lấy từ styles.html) để liền mạch, không còn cảnh chữ/icon app đè lên
+     đồng hồ, pin. viewport-fit=cover + status-bar-style=black-translucent thì env(safe-area-inset-top)
+     mới đọc được đúng chiều cao vùng này trên từng dòng iPad/iPhone. */
+  #statusbar-fill{
+    flex:0 0 auto; width:100%; height:env(safe-area-inset-top); background:#161b27;
+  }
+
   #app-frame{
-    display:block; width:100%; height:100vh; border:none; background:#ffffff;
+    flex:1 1 auto; display:block; width:100%; border:none; background:#ffffff;
     opacity:0; transition:opacity .35s ease;
   }
   #app-frame.ready{ opacity:1; }
-  @supports (height: 100dvh){
-    #app-frame{ height:100dvh; }
-  }
-  /* Màn hình chờ chuyên nghiệp: logo app + vòng xoay nhỏ, mờ dần khi app thật đã tải xong */
+
+  /* Màn hình chờ chuyên nghiệp: logo app + vòng xoay nhỏ, mờ dần khi app thật đã tải xong.
+     Che luôn cả dải status bar phía trên trong lúc chờ, nên không cần lo thứ tự hiển thị. */
   #boot-msg{
     position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap:18px; background:#ffffff; transition:opacity .35s ease, visibility .35s ease;
@@ -61,6 +69,8 @@
 </style>
 </head>
 <body>
+  <div id="statusbar-fill"></div>
+
   <div id="boot-msg">
     <img id="boot-logo" src="icons/icon-180.png" alt="Quản lý Tiến độ">
     <div id="boot-spinner"></div>
