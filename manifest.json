@@ -1,6 +1,6 @@
 {
-  "name": "Quản lý Tiến độ",
-  "short_name": "QL Tiến độ",
+  "name": "Tiến độ Đấu thầu ĐTXD-SCL",
+  "short_name": "Tiến độ ĐT",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "any",
