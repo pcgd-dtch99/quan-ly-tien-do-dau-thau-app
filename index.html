@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Quản lý Tiến độ</title>
+
+<!-- ===== CÁC THẺ NÀY LÀ MẤU CHỐT ĐỂ SAFARI/iOS HIỂU ĐÂY LÀ "APP" KHI THÊM VÀO MÀN HÌNH CHÍNH:
+     ẩn thanh địa chỉ, chạy toàn màn hình, dùng icon + tên riêng thay vì icon Safari mặc định. ===== -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QL Tiến độ">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+<link rel="icon" href="icons/icon-512.png">
+<link rel="manifest" href="manifest.json">
+
+<style>
+  html, body{
+    margin:0; padding:0; width:100%; height:100%;
+    background:#ffffff; overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* Toàn màn hình, tính đúng cả khi có tai thỏ/Dynamic Island trên các dòng iPad/iPhone mới */
+  #app-frame{
+    position:fixed; inset:0; width:100%; border:none; background:#ffffff;
+    height:100vh;
+  }
+  @supports (height: 100dvh){
+    #app-frame{ height:100dvh; }
+  }
+  /* Màn hình chờ ngắn trong lúc iframe đang tải trang thật bên trong */
+  #boot-msg{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    color:rgba(20,30,60,.55); font:600 15px/1.5 -apple-system, system-ui, sans-serif;
+    background:#ffffff; z-index:1; pointer-events:none;
+  }
+</style>
+</head>
+<body>
+  <div id="boot-msg">Đang mở ứng dụng…</div>
+
+  <!-- LINK APPS SCRIPT THẬT ĐƯỢC NHÚNG TOÀN MÀN HÌNH TẠI ĐÂY — người dùng sẽ không còn thấy
+       thanh địa chỉ hay link web vì đang đứng trong trang wrapper này, không phải Safari thường.
+       Trang gốc bên trong (Code.gs / index.html...) KHÔNG hề bị thay đổi gì cả. -->
+  <iframe
+    id="app-frame"
+    src="https://script.google.com/macros/s/AKfycbz9t98npGFMF9ja98qiDA9VysvI8sse8v1HboSR8YDK8wH1wm80ZkzeHY9V4kNu2CFcyw/exec"
+    title="Quản lý Tiến độ"
+    allow="clipboard-read; clipboard-write"
+    onload="document.getElementById('boot-msg').style.display='none';">
+  </iframe>
+</body>
+</html>
