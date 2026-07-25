@@ -49,7 +49,7 @@
      Che luôn cả dải status bar phía trên trong lúc chờ, nên không cần lo thứ tự hiển thị. */
   #boot-msg{
     position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:18px; background:#ffffff; transition:opacity .35s ease, visibility .35s ease;
+    gap:18px; background:linear-gradient(135deg, #e8f9ee 0%, #eef3fb 45%, #fdedf5 100%); transition:opacity .35s ease, visibility .35s ease;
   }
   #boot-msg.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
   #boot-illustration{
