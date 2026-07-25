@@ -52,19 +52,19 @@
     gap:18px; background:#ffffff; transition:opacity .35s ease, visibility .35s ease;
   }
   #boot-msg.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
-  #boot-logo{
-    width:104px; height:104px; border-radius:24px; box-shadow:0 10px 30px rgba(30,49,89,.16);
-    animation:bootPulse 1.8s ease-in-out infinite;
+  #boot-illustration{
+    width:min(80vw, 460px); height:auto; display:block;
+    animation:bootFloat 3.6s ease-in-out infinite;
   }
   #boot-spinner{
-    width:26px; height:26px; border-radius:50%;
-    border:3px solid rgba(30,49,89,.15); border-top-color:#1E3159;
+    width:22px; height:22px; border-radius:50%;
+    border:3px solid rgba(30,49,89,.12); border-top-color:#1E3159;
     animation:bootSpin .8s linear infinite;
   }
   #boot-text{
     font:600 14.5px/1.5 -apple-system, system-ui, sans-serif; color:#5b6c8f; letter-spacing:.2px;
   }
-  @keyframes bootPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.045); } }
+  @keyframes bootFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
   @keyframes bootSpin{ to{ transform:rotate(360deg); } }
 </style>
 </head>
@@ -72,7 +72,133 @@
   <div id="statusbar-fill"></div>
 
   <div id="boot-msg">
-    <img id="boot-logo" src="icons/icon-180.png" alt="Tiến độ Đấu thầu ĐTXD-SCL">
+    <svg id="boot-illustration" viewBox="0 0 1000 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hệ thống điện">
+      <defs>
+        <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c3c8d1"/>
+          <stop offset="55%" stop-color="#9aa1ad"/>
+          <stop offset="100%" stop-color="#7b8290"/>
+        </linearGradient>
+        <linearGradient id="metalDark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#a7adb8"/>
+          <stop offset="100%" stop-color="#6b7280"/>
+        </linearGradient>
+        <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#aeb4bf"/>
+          <stop offset="100%" stop-color="#8b909c"/>
+        </linearGradient>
+      </defs>
+
+      <rect x="0" y="308" width="1000" height="10" fill="url(#ground)" opacity="0.6"/>
+
+      <g fill="none" stroke="#9aa1ad" stroke-width="1.6" opacity="0.75">
+        <path d="M120,150 Q220,110 320,60"/>
+        <path d="M120,175 Q220,140 320,95"/>
+        <path d="M320,70 Q400,140 470,165"/>
+        <path d="M320,100 Q400,165 470,190"/>
+        <path d="M640,175 Q680,150 705,148"/>
+        <path d="M640,200 Q680,175 705,172"/>
+        <path d="M745,150 Q800,140 845,175"/>
+        <path d="M745,175 Q800,168 845,200"/>
+        <path d="M845,178 Q900,190 930,215"/>
+        <path d="M845,205 Q900,215 930,235"/>
+      </g>
+
+      <circle r="3.2" fill="#7fa8e0">
+        <animateMotion dur="3.2s" repeatCount="indefinite" path="M120,150 Q220,110 320,60 Q400,140 470,165 Q560,190 640,175 Q680,150 705,148 Q745,150 800,140 845,175 Q900,190 930,215"/>
+      </circle>
+      <circle r="2.6" fill="#7fa8e0" opacity="0.8">
+        <animateMotion dur="3.2s" begin="1.1s" repeatCount="indefinite" path="M120,175 Q220,140 320,95 Q400,165 470,190 Q560,205 640,200 Q680,175 705,172 Q745,175 800,168 845,200 Q900,215 930,235"/>
+      </circle>
+
+      <g fill="url(#metal)" stroke="#5f6572" stroke-width="1">
+        <rect x="18" y="205" width="150" height="103" rx="2"/>
+        <path d="M100,205 L100,168 A30,30 0 0 1 160,168 L160,205 Z"/>
+        <rect x="34" y="95" width="16" height="112"/>
+        <rect x="64" y="75" width="16" height="132"/>
+        <rect x="0" y="303" width="186" height="7" fill="url(#ground)" opacity="0.7" stroke="none"/>
+      </g>
+      <g fill="#eef0f3" opacity="0.9">
+        <rect x="28" y="258" width="130" height="6"/>
+        <rect x="28" y="274" width="130" height="6"/>
+        <rect x="28" y="290" width="130" height="6"/>
+        <rect x="36" y="112" width="10" height="6"/>
+        <rect x="36" y="134" width="10" height="6"/>
+        <rect x="36" y="156" width="10" height="6"/>
+        <rect x="66" y="95" width="10" height="6"/>
+        <rect x="66" y="120" width="10" height="6"/>
+        <rect x="66" y="145" width="10" height="6"/>
+        <rect x="66" y="170" width="10" height="6"/>
+      </g>
+
+      <g fill="none" stroke="url(#metalDark)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M320,20 L275,60 L275,300 M320,20 L365,60 L365,300"/>
+        <path d="M245,88 L395,88 M255,140 L385,140"/>
+        <path d="M275,60 L365,60"/>
+        <path d="M275,88 L365,60 M365,88 L275,60"/>
+        <path d="M255,140 L365,88 M385,140 L275,88"/>
+        <path d="M275,140 L365,220 M365,140 L275,220"/>
+        <path d="M275,220 L365,220"/>
+        <path d="M275,220 L320,300 M365,220 L320,300"/>
+      </g>
+
+      <g stroke="#5f6572" stroke-width="1">
+        <rect x="470" y="128" width="170" height="46" fill="url(#metal)"/>
+        <g stroke="#7b8290" stroke-width="1.4">
+          <line x1="495" y1="128" x2="495" y2="174"/>
+          <line x1="525" y1="128" x2="525" y2="174"/>
+          <line x1="555" y1="128" x2="555" y2="174"/>
+          <line x1="585" y1="128" x2="585" y2="174"/>
+          <line x1="615" y1="128" x2="615" y2="174"/>
+        </g>
+        <polyline points="480,128 490,116 500,128 510,116 520,128 530,116 540,128 550,116 560,128 570,116 580,128 590,116 600,128 610,116 620,128 630,116" fill="none" stroke="#7b8290" stroke-width="1.6"/>
+        <rect x="480" y="174" width="150" height="70" fill="url(#metalDark)"/>
+        <g stroke="#c3c8d1" stroke-width="1.6">
+          <line x1="492" y1="180" x2="492" y2="238"/>
+          <line x1="504" y1="180" x2="504" y2="238"/>
+          <line x1="516" y1="180" x2="516" y2="238"/>
+          <line x1="528" y1="180" x2="528" y2="238"/>
+          <line x1="540" y1="180" x2="540" y2="238"/>
+          <line x1="552" y1="180" x2="552" y2="238"/>
+          <line x1="564" y1="180" x2="564" y2="238"/>
+          <line x1="576" y1="180" x2="576" y2="238"/>
+          <line x1="588" y1="180" x2="588" y2="238"/>
+          <line x1="600" y1="180" x2="600" y2="238"/>
+          <line x1="612" y1="180" x2="612" y2="238"/>
+        </g>
+        <rect x="470" y="244" width="170" height="64" fill="url(#metal)"/>
+      </g>
+
+      <g stroke="#5f6572" stroke-width="1" fill="url(#metalDark)">
+        <rect x="700" y="150" width="10" height="158"/>
+        <rect x="668" y="146" width="74" height="7"/>
+        <rect x="675" y="176" width="60" height="7"/>
+        <rect x="800" y="175" width="9" height="133"/>
+        <rect x="772" y="171" width="66" height="7"/>
+      </g>
+      <g stroke="#8b909c" stroke-width="1.4">
+        <line x1="678" y1="153" x2="678" y2="146"/>
+        <line x1="705" y1="153" x2="705" y2="146"/>
+        <line x1="732" y1="153" x2="732" y2="146"/>
+        <line x1="683" y1="183" x2="683" y2="176"/>
+        <line x1="705" y1="183" x2="705" y2="176"/>
+        <line x1="727" y1="183" x2="727" y2="176"/>
+        <line x1="780" y1="178" x2="780" y2="171"/>
+        <line x1="804" y1="178" x2="804" y2="171"/>
+        <line x1="828" y1="178" x2="828" y2="171"/>
+      </g>
+
+      <g fill="url(#metal)" stroke="#5f6572" stroke-width="1">
+        <polygon points="895,205 850,250 940,250"/>
+        <rect x="860" y="250" width="70" height="58"/>
+      </g>
+      <g fill="#eef0f3">
+        <rect x="905" y="278" width="14" height="30"/>
+        <circle cx="875" cy="272" r="9"/>
+        <line x1="875" y1="264" x2="875" y2="280" stroke="#9aa1ad" stroke-width="1.2"/>
+        <line x1="867" y1="272" x2="883" y2="272" stroke="#9aa1ad" stroke-width="1.2"/>
+      </g>
+    </svg>
     <div id="boot-spinner"></div>
     <div id="boot-text">Đang mở ứng dụng…</div>
   </div>
