@@ -23,27 +23,49 @@
 <style>
   html, body{
     margin:0; padding:0; width:100%; height:100%;
-    background:#ffffff; overflow:hidden;
+    background:#ffffff;
     -webkit-tap-highlight-color:transparent;
+    overscroll-behavior:none; /* tránh hiệu ứng bounce/giật lố ở rìa trang, nhưng KHÔNG chặn cuộn bên trong iframe */
   }
-  /* Toàn màn hình, tính đúng cả khi có tai thỏ/Dynamic Island trên các dòng iPad/iPhone mới */
+  /* QUAN TRỌNG: iframe để bình thường (không dùng position:fixed) và html/body KHÔNG dùng
+     overflow:hidden — đây chính là tổ hợp khiến Safari/iOS "nuốt" thao tác vuốt dọc, không
+     truyền được cử chỉ cuộn xuống vào bên trong iframe (trong khi vuốt ngang vẫn lọt qua được). */
   #app-frame{
-    position:fixed; inset:0; width:100%; border:none; background:#ffffff;
-    height:100vh;
+    display:block; width:100%; height:100vh; border:none; background:#ffffff;
+    opacity:0; transition:opacity .35s ease;
   }
+  #app-frame.ready{ opacity:1; }
   @supports (height: 100dvh){
     #app-frame{ height:100dvh; }
   }
-  /* Màn hình chờ ngắn trong lúc iframe đang tải trang thật bên trong */
+  /* Màn hình chờ chuyên nghiệp: logo app + vòng xoay nhỏ, mờ dần khi app thật đã tải xong */
   #boot-msg{
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    color:rgba(20,30,60,.55); font:600 15px/1.5 -apple-system, system-ui, sans-serif;
-    background:#ffffff; z-index:1; pointer-events:none;
+    position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:18px; background:#ffffff; transition:opacity .35s ease, visibility .35s ease;
   }
+  #boot-msg.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  #boot-logo{
+    width:104px; height:104px; border-radius:24px; box-shadow:0 10px 30px rgba(30,49,89,.16);
+    animation:bootPulse 1.8s ease-in-out infinite;
+  }
+  #boot-spinner{
+    width:26px; height:26px; border-radius:50%;
+    border:3px solid rgba(30,49,89,.15); border-top-color:#1E3159;
+    animation:bootSpin .8s linear infinite;
+  }
+  #boot-text{
+    font:600 14.5px/1.5 -apple-system, system-ui, sans-serif; color:#5b6c8f; letter-spacing:.2px;
+  }
+  @keyframes bootPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.045); } }
+  @keyframes bootSpin{ to{ transform:rotate(360deg); } }
 </style>
 </head>
 <body>
-  <div id="boot-msg">Đang mở ứng dụng…</div>
+  <div id="boot-msg">
+    <img id="boot-logo" src="icons/icon-180.png" alt="Quản lý Tiến độ">
+    <div id="boot-spinner"></div>
+    <div id="boot-text">Đang mở ứng dụng…</div>
+  </div>
 
   <!-- LINK APPS SCRIPT THẬT ĐƯỢC NHÚNG TOÀN MÀN HÌNH TẠI ĐÂY — người dùng sẽ không còn thấy
        thanh địa chỉ hay link web vì đang đứng trong trang wrapper này, không phải Safari thường.
@@ -53,7 +75,7 @@
     src="https://script.google.com/macros/s/AKfycbz9t98npGFMF9ja98qiDA9VysvI8sse8v1HboSR8YDK8wH1wm80ZkzeHY9V4kNu2CFcyw/exec"
     title="Quản lý Tiến độ"
     allow="clipboard-read; clipboard-write"
-    onload="document.getElementById('boot-msg').style.display='none';">
+    onload="document.getElementById('app-frame').classList.add('ready'); document.getElementById('boot-msg').classList.add('hidden');">
   </iframe>
 </body>
 </html>
