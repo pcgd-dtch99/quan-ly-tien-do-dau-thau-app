@@ -39,12 +39,6 @@
     flex:0 0 auto; width:100%; height:env(safe-area-inset-top); background:#161b27;
   }
 
-  #app-frame{
-    flex:1 1 auto; display:block; width:100%; border:none; background:#ffffff;
-    opacity:0; transition:opacity .35s ease;
-  }
-  #app-frame.ready{ opacity:1; }
-
   /* Màn hình chờ chuyên nghiệp: logo app + vòng xoay nhỏ, mờ dần khi app thật đã tải xong.
      Che luôn cả dải status bar phía trên trong lúc chờ, nên không cần lo thứ tự hiển thị. */
   #boot-msg{
@@ -77,15 +71,46 @@
     <div id="boot-text">Đang mở ứng dụng…</div>
   </div>
 
-  <!-- LINK APPS SCRIPT THẬT ĐƯỢC NHÚNG TOÀN MÀN HÌNH TẠI ĐÂY — người dùng sẽ không còn thấy
-       thanh địa chỉ hay link web vì đang đứng trong trang wrapper này, không phải Safari thường.
-       Trang gốc bên trong (Code.gs / index.html...) KHÔNG hề bị thay đổi gì cả. -->
-  <iframe
-    id="app-frame"
-    src="https://script.google.com/macros/s/AKfycbz9t98npGFMF9ja98qiDA9VysvI8sse8v1HboSR8YDK8wH1wm80ZkzeHY9V4kNu2CFcyw/exec"
-    title="Tiến độ Đấu thầu ĐTXD-SCL"
-    allow="clipboard-read; clipboard-write"
-    onload="document.getElementById('app-frame').classList.add('ready'); document.getElementById('boot-msg').classList.add('hidden');">
-  </iframe>
+  <script>
+    /* ══════════════════════════════════════════════════════════════════
+       VỎ PWA — CHUYỂN HƯỚNG TOÀN TRANG, KHÔNG NHÚNG <iframe>
+       ══════════════════════════════════════════════════════════════════
+       Trước đây trang này nhúng app thật bằng <iframe>. Nhưng bản thân
+       Apps Script luôn tự đóng gói nội dung web app bên trong 1 iframe
+       nội bộ của Google (script.googleusercontent.com) — nên khi vỏ này
+       CŨNG nhúng bằng iframe, xảy ra "iframe lồng trong iframe", bị
+       chính sách bảo mật của Google chặn → lỗi 401 trên một số trình
+       duyệt/thiết bị (đặc biệt Safari/iPad).
+
+       Cách khắc phục: trang chờ này chỉ hiện logo + spinner trong
+       chớp nhoáng, rồi điều hướng TOÀN BỘ trang (không phải iframe)
+       sang thẳng URL app thật — không còn hiện tượng lồng khung nữa.
+
+       URL thật được mã hoá Base64 thay vì để dạng chữ thường, để tránh
+       bot/công cụ dò quét tự động tìm thấy link nội bộ khi duyệt qua
+       repo công khai trên GitHub. Lưu ý: đây chỉ là che bớt (obfuscation),
+       không phải bảo mật thật sự — vì JS chạy phía trình duyệt nên ai
+       cố tình xem mã nguồn vẫn giải mã được. Lớp bảo vệ thật sự vẫn là
+       mật khẩu đăng nhập của chính ứng dụng, không phải việc giấu URL. */
+    var APP_URL_B64 = 'aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6OXQ5OG5wR0ZNRjlqYTk4cWlEQTlWeXN2SThzc2U4djFIYm9TUjhZREs4d0gxd204MFpremVIWTlWNGtOdTJDRmN5dy9leGVj';
+    var APP_URL = atob(APP_URL_B64);
+
+    function _redirectToApp() {
+      try { window.location.replace(APP_URL); }
+      catch (e) { window.location.href = APP_URL; }
+    }
+    _redirectToApp();
+
+    // Nếu vì lý do nào đó (mạng chậm, trình duyệt chặn điều hướng) mà
+    // 2.5 giây sau vẫn còn ở trang chờ này → hiện nút bấm thủ công,
+    // không để người dùng nhìn màn hình trắng/chờ mãi không hiểu vì sao.
+    setTimeout(function () {
+      var b = document.getElementById('boot-text');
+      if (b) {
+        b.innerHTML = 'Không thể tự mở ứng dụng.<br>' +
+          '<a href="' + APP_URL + '" style="color:#1E3159;text-decoration:underline;">Bấm vào đây để mở</a>';
+      }
+    }, 2500);
+  </script>
 </body>
 </html>
